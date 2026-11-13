@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MaaS: Mistakes as a Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#fbfaff; --fg:#1a1530; --muted:#6b6485; --card:#ffffff; --line:#e7e2f7;
+  --a:#7c3aed; --b:#ec4899; --warn:#f59e0b; --ok:#10b981;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#120f1f; --fg:#f1edff; --muted:#a39cc0; --card:#1c1830; --line:#2e2848;
+  }
+}
+:root[data-theme="dark"]{--bg:#120f1f; --fg:#f1edff; --muted:#a39cc0; --card:#1c1830; --line:#2e2848;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:700;font-size:1.3rem;transform:rotate(-3deg);display:inline-block}
+.logo span{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav .links{display:flex;gap:18px;font-size:.95rem;color:var(--muted)}
+@media (max-width:640px){nav .links{display:none}}
+.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;font-weight:700;color:var(--a)}
+.hero{position:relative;padding:60px 0 40px;text-align:center}
+.hero::before{content:"";position:absolute;inset:-40px -200px auto;height:420px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(124,58,237,.25),transparent),radial-gradient(closest-side at 70% 40%,rgba(236,72,153,.2),transparent)}
+h1{font-size:clamp(2.2rem,6vw,4.2rem);line-height:1.05;margin:14px 0}
+h1 .grad{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{max-width:620px;margin:0 auto;color:var(--muted);font-size:1.1rem}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.btn{border:0;border-radius:999px;padding:13px 24px;font:inherit;font-weight:700;cursor:pointer;transition:transform .15s}
+.btn:focus-visible{outline:3px solid var(--b);outline-offset:3px}
+.btn.primary{background:linear-gradient(90deg,var(--a),var(--b));color:#fff}
+.btn.ghost{background:transparent;color:var(--fg);border:2px solid var(--line)}
+.btn:hover{transform:translateY(-2px)}
+.trust{margin-top:34px;color:var(--muted);font-size:.9rem}
+.trust b{color:var(--fg)}
+section{padding:56px 0}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin:8px 0 10px}
+.center{text-align:center}
+/* demo */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 60px rgba(124,58,237,.12)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.demo-grid{grid-template-columns:1fr}}
+textarea,.out{width:100%;min-height:190px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:14px;font:inherit;font-size:.98rem}
+.out{white-space:pre-wrap;position:relative}
+.out mark{background:rgba(245,158,11,.28);color:inherit;border-radius:4px;padding:0 2px}
+.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:14px 0 4px}
+.controls label{display:flex;gap:8px;align-items:center;font-size:.95rem;cursor:pointer}
+input[type=range]{accent-color:var(--a)}
+input[type=checkbox]{accent-color:var(--b);width:18px;height:18px}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(16,185,129,.15);color:var(--ok)}
+.note{font-size:.85rem;color:var(--muted);min-height:1.3em}
+/* features */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+@media (max-width:820px){.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 4px 18px rgba(0,0,0,.06)}
+.card .ic{font-size:1.8rem}
+.card h3{margin:10px 0 6px}
+.card p{margin:0;color:var(--muted)}
+/* pricing */
+.price{position:relative}
+.price .amt{font-size:2.4rem;font-weight:700;margin:8px 0}
+.price .amt small{font-size:1rem;color:var(--muted);font-weight:400}
+.price ul{padding-left:18px;margin:12px 0 18px;color:var(--muted)}
+.price.pop{border:2px solid var(--b)}
+.pop-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(4deg);background:var(--b);color:#fff;font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap}
+/* testimonials */
+.quote{font-family:"Comic Neue","Comic Sans MS",cursive;font-size:1.1rem}
+.who{margin-top:12px;font-size:.88rem;color:var(--muted)}
+/* faq */
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:700}
+details p{color:var(--muted);margin:10px 0 0}
+footer{padding:40px 0 60px;color:var(--muted);font-size:.85rem;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120px);background:var(--fg);color:var(--bg);padding:12px 20px;border-radius:12px;font-weight:600;transition:transform .3s;z-index:10;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo"><span>MaaS</span>🙃</div>
+    <div class="links"><a href="#demo">Demo</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#nowhere">Careers (hiring 0)</a></div>
+  </nav>
+
+  <header class="hero">
+    <div class="eyebrow">✨ NOW WITH 40% MORE ✨</div>
+    <h1>The worlds first platform for <span class="grad">Mistaeks as a Service</span></h1>
+    <p class="sub">You told your AI to "make no mistakes." It listened. Now your output is flawless and nobody believes a human made it. MaaS puts the errors back in: artisanal, hand-crafted, confidently wrong.</p>
+    <div class="cta-row">
+      <button class="btn primary" id="stop">Get Stopped →</button>
+      <button class="btn ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Watch Demo (it's text) →</button>
+    </div>
+    <p class="trust">Trusted by <b>0</b> companies, including Google*</p>
+  </header>
+
+  <section id="demo">
+    <div class="center">
+      <div class="eyebrow">LIVE DEMO</div>
+      <h2>Paste something correct. Receive something confident.</h2>
+    </div>
+    <div class="demo">
+      <div class="demo-grid">
+        <textarea id="in" aria-label="Your correct text">The meeting is at 3pm on Tuesday. The project budget is $12,000 and their team will deliver 4 reports by the end of the quarter. Please make sure the numbers are accurate before sending.</textarea>
+        <div class="out" id="out" aria-live="polite"><span style="color:var(--muted)">Your mistakes will appear here. Probably.</span></div>
+      </div>
+      <div class="controls">
+        <label>Mistake density <input type="range" id="lvl" min="1" max="10" value="5"></label>
+        <label><input type="checkbox" id="nomistakes"> Make no mistakes</label>
+        <button class="btn primary" id="go">Mistakify →</button>
+        <span class="badge" id="conf">Confidence: 100%</span>
+      </div>
+      <div class="note" id="note"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="center">
+      <div class="eyebrow">FEATURES</div>
+      <h2>Enterprise-grade. Grade F.</h2>
+    </div>
+    <div class="grid3">
+      <div class="card"><div class="ic">🐢</div><h3>Blazing fast</h3><p>Mistakes delivered in under 3 business weeks, or your mistakes back.</p></div>
+      <div class="card"><div class="ic">🔒</div><h3>Bank-level security</h3><p>Your data is stored in a shoebox under the desk of a bank employee.</p></div>
+      <div class="card"><div class="ic">🤖</div><h3>AI-powered</h3><p>Powered by an AI that was told "make tons of mistakes" and took it personally.</p></div>
+      <div class="card"><div class="ic">📉</div><h3>Scales infinitely</h3><p>Every additional user reduces quality for all other users. That's synergy.</p></div>
+      <div class="card"><div class="ic">🌍</div><h3>Available in 1 language</h3><p>English (US), English (UK), English (Wrong).</p></div>
+      <div class="card"><div class="ic">✅</div><h3>99.9% downtime</h3><p>Industry-leading unavailability. You can't make a mistake if you can't log in.</p></div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="center">
+      <div class="eyebrow">PRICING</div>
+      <h2>Simple, transparent, incorrect</h2>
+    </div>
+    <div class="grid3">
+      <div class="card price">
+        <h3>Starter</h3>
+        <div class="amt">$0<small>/mo</small></div>
+        <ul><li>12 mistakes per month</li><li>Community support (a forum where everyone is wrong)</li><li>Typos only</li></ul>
+        <button class="btn ghost plan">Choose Starter →</button>
+      </div>
+      <div class="card price pop">
+        <div class="pop-tag">Most Popluar</div>
+        <h3>Pro</h3>
+        <div class="amt">$49<small>/mo, or $600/yr (save −$12)</small></div>
+        <ul><li>Unlimited mistakes</li><li>Priority mistakes</li><li>Off-by-one errors, off-by-two errors</li><li>Confident citations to papers that don't exist</li></ul>
+        <button class="btn primary plan">Choose Pro →</button>
+      </div>
+      <div class="card price">
+        <h3>Enterprise</h3>
+        <div class="amt">$8<small>/mo</small></div>
+        <ul><li>Everything in Starter, minus Starter</li><li>Dedicated account manager (also wrong)</li><li>SSO (Somebody Else's Sign-On)</li></ul>
+        <button class="btn ghost plan">Contact Sails →</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="center">
+      <div class="eyebrow">TESTIMONIALS</div>
+      <h2>Don't take our word for it. Take theirs, which is also ours.</h2>
+    </div>
+    <div class="grid3">
+      <div class="card"><p class="quote">"I told it to make no mistakes and it made eleven. Finally, an AI that respects me enough to push back."</p><p class="who">Chad R., Founder of 14 stealth startups</p></div>
+      <div class="card"><p class="quote">"10/10 would hallucinate again."</p><p class="who">Karen, Unverified Customer</p></div>
+      <div class="card"><p class="quote">"MaaS changed my life. My quarterly report now says we made $4 billion. I have been promoted and also arrested."</p><p class="who">Name withheld on advice of counsel</p></div>
+    </div>
+  </section>
+
+  <section id="faq" style="max-width:720px;margin:0 auto">
+    <div class="center">
+      <div class="eyebrow">FAQ</div>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <details><summary>Is my data safe?</summary><p>Yes, you can cancel anytime by yelling "cancel" into any Wi‑Fi router.</p></details>
+    <details><summary>How do I cancel?</summary><p>Fourteen. It was always fourteen.</p></details>
+    <details><summary>How many mistakes are included?</summary><p>MaaS is GDPR, SOC 2, and HIPPO compliant.</p></details>
+    <details><summary>Is it compliant?</summary><p>Great question! This is a great question. Great.</p></details>
+    <details><summary>Why are these answers in the wrong order?</summary><p>That one's a feature. Your data, however, is not safe.</p></details>
+  </section>
+</div>
+
+<footer>
+  © 2027–2019 MaaS Inc., a subsidiary of MaaS Inc. All rights reversed.<br>
+  *Not Google.<br><br>
+  Built one-shot, as requested. The only mistake that wasn't allowed was a real bug.
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  let toastTimer;
+  function toast(msg){
+    const t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+
+  const stopMsgs=["Signup failed successfully.","You've been stopped. Congratulations.","Error 200: Everything is fine, which is the problem.","Please try again in 3–5 business years."];
+  let si=0;
+  $('stop').addEventListener('click',()=>toast(stopMsgs[si++%stopMsgs.length]));
+  document.querySelectorAll('.plan').forEach(b=>b.addEventListener('click',()=>{
+    toast(b.textContent.includes('Sails')?"A sailboat has been dispatched to your location.":"Plan selected: "+["Starter","Pro","Enterprise"][Math.floor(Math.random()*3)]+". Close enough.");
+  }));
+
+  const rand = n => Math.floor(Math.random()*n);
+  const chance = p => Math.random()<p;
+  const esc = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const mk = s => '<mark>'+esc(s)+'</mark>';
+
+  const swaps={their:"they're",there:"their","they're":"there",your:"you're",its:"it's",then:"than",than:"then",affect:"effect",effect:"affect",accurate:"accurite",definitely:"defiantly",Tuesday:"Tuesday (or Thursday)",before:"after"};
+  const asides=[" (source: trust me)"," (this was verified by a guy)"," (peer-reviewed by my cousin)"," (as Einstein famously said)"," (citation: Smith et al., 2031)"," (100% confirmed)"];
+
+  function mistakeWord(w,p){
+    const m=w.match(/^([^A-Za-z0-9$]*)(.*?)([^A-Za-z0-9%]*)$/);
+    if(!m) return esc(w);
+    const [,pre,core,post]=m;
+    if(!core) return esc(w);
+    const key=core.toLowerCase();
+    // numbers: off-by-one, off-by-a-lot
+    if(/\d/.test(core) && chance(p*1.4)){
+      const out=core.replace(/\d[\d,]*/,d=>{
+        const n=parseInt(d.replace(/,/g,''),10);
+        const opts=[n+1,n-1,n*10,Math.round(n/3),n+7];
+        const v=opts[rand(opts.length)];
+        return d.includes(',')?v.toLocaleString('en-US'):String(v);
+      });
+      return esc(pre)+mk(out)+esc(post);
+    }
+    if(swaps[key] && chance(p*1.5)) return esc(pre)+mk(swaps[key])+esc(post);
+    if(core.length>3 && chance(p*0.5)){
+      const i=1+rand(core.length-2);
+      const s=core.slice(0,i)+core[i+1]+core[i]+core.slice(i+2);
+      return esc(pre)+mk(s)+esc(post);
+    }
+    if(core.length>2 && chance(p*0.12)) return esc(pre)+mk(core.toUpperCase())+esc(post);
+    return esc(w);
+  }
+
+  function mistakify(text,p){
+    const sentences=text.split(/(?<=[.!?])\s+/);
+    return sentences.map(s=>{
+      let out=s.split(/(\s+)/).map(t=>/^\s+$/.test(t)?t:mistakeWord(t,p)).join('');
+      if(chance(p*0.7)){
+        const a=asides[rand(asides.length)];
+        out=out.replace(/([.!?])?$/,(x)=>mk(a)+(x||''));
+      }
+      return out;
+    }).join(' ');
+  }
+
+  $('nomistakes').addEventListener('change',e=>{
+    $('note').textContent=e.target.checked?"Instruction noted. Ignoring it with enthusiasm. Mistake density doubled.":"";
+  });
+
+  $('go').addEventListener('click',()=>{
+    const text=$('in').value.trim();
+    if(!text){ $('out').innerHTML=mk("You submitted nothing, which we have improved into less than nothing."); return; }
+    let p=$('lvl').value/20;
+    if($('nomistakes').checked) p=Math.min(0.95,p*2);
+    $('out').innerHTML=mistakify(text,p);
+    const count=$('out').querySelectorAll('mark').length;
+    $('conf').textContent="Confidence: "+(100+count*3)+"%";
+    $('note').textContent=count?`${count} mistakes applied. Accuracy is now within industry standards.`:"Zero mistakes made. This has been logged as a mistake.";
+  });
+})();
+</script>
+</body>
+</html>
